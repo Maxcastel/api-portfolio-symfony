@@ -14,11 +14,11 @@ class Framework
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'frameworks')]

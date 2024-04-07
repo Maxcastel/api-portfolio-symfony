@@ -23,4 +23,30 @@ class ClasseController extends AbstractController
             Response::HTTP_OK, [], ['groups' => 'getClasses']
         );
     }
+
+    #[Route('/api/classes/{id}', methods: ['GET'], name: 'classe_get_one')]
+    public function getClasse(int $id, ClasseRepository $classeRepository): JsonResponse
+    {
+        $classe = $classeRepository->find($id);
+        if (!$classe) {
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Classe with id $id not found"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $classe,
+                "message" => "Operation completed with success"
+            ], 
+            Response::HTTP_OK, [], ['groups' => 'getClasses']
+        );
+    }
 }

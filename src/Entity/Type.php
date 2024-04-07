@@ -14,14 +14,15 @@ class Type
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Project::class)]
+    #[Groups(['getTypes'])]
     private Collection $projects;
 
     public function __construct()

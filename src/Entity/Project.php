@@ -15,43 +15,43 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $url = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $github = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?string $thumbnail = null;
 
     #[ORM\ManyToMany(targetEntity: Framework::class, inversedBy: 'projects')]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getLanguages', 'getTypes'])]
     private Collection $frameworks;
 
     #[ORM\ManyToMany(targetEntity: Language::class, inversedBy: 'projects')]
-    #[Groups(['getFrameworks'])]
+    #[Groups(['getFrameworks', 'getTypes'])]
     private Collection $languages;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
@@ -61,11 +61,11 @@ class Project
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
-    #[Groups(['getFrameworks', 'getLanguages'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
     private ?Classe $classe = null;
 
     public function __construct()

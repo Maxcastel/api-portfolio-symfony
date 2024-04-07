@@ -6,9 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\FrameworkRepository;
+use App\Entity\Framework;
+use Exception;
 
 class FrameworkController extends AbstractController
 {
@@ -38,5 +41,36 @@ class FrameworkController extends AbstractController
             ], 
             Response::HTTP_OK, [], ['groups' => 'getFrameworks']
         );
+    }
+
+    #[Route('/api/frameworks', methods: ['POST'], name: 'framework_create')]
+    public function createFramework(Request $request, EntityManagerInterface $em, SerializerInterface $serializer): JsonResponse
+    {
+        try{
+            $framework = $serializer->deserialize($request->getContent(), Framework::class, 'json');
+
+            $em->persist($framework);
+            $em->flush();
+            
+            return $this->json(
+                [
+                    "status" => 201,
+                    "success" => true,
+                    "data" => $framework,
+                    "message" => "Created with success"
+                ], 
+                Response::HTTP_CREATED, [], ['groups' => 'getFrameworks']
+            );
+        }
+        catch(Exception $e){
+            return $this->json(
+                [
+                    "status" => 400,
+                    "success" => false,
+                    "message" => $e->getMessage()
+                ], 
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 }

@@ -23,4 +23,30 @@ class CategoryController extends AbstractController
             Response::HTTP_OK, [], ['groups' => 'getCategory']
         );
     }
+
+    #[Route('/api/category/{id}', methods: ['GET'], name: 'category_get_one')]
+    public function getCategory(int $id, CategoryRepository $categoryRepository): JsonResponse
+    {
+        $category = $categoryRepository->find($id);
+        if (!$category){
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Category with id $id does not exist"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $category,
+                "message" => "Operation completed with success"
+            ], 
+            Response::HTTP_OK, [], ['groups' => 'getCategory']
+        );
+    }
 }

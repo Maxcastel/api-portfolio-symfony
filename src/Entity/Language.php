@@ -14,11 +14,11 @@ class Language
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses'])]
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'languages')]

@@ -24,4 +24,18 @@ class LanguageController extends AbstractController
             Response::HTTP_OK, [], ['groups' => 'getLanguages']
         );
     }
+
+    #[Route('/api/languages/{id}', methods: ['GET'], name: 'language_get_one')]
+    public function getLanguage(int $id, LanguageRepository $languageRepository): JsonResponse
+    {
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $languageRepository->find($id),
+                "message" => "Operation completed with success"
+            ], 
+            Response::HTTP_OK, [], ['groups' => 'getLanguages']
+        );
+    }
 }

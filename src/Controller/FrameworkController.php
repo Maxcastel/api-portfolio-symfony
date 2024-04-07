@@ -102,5 +102,37 @@ class FrameworkController extends AbstractController
             Response::HTTP_NO_CONTENT
         );
     }
+
+    #[Route('/api/frameworks/{id}', methods: ['PATCH'], name: 'framework_edit')]
+    public function editFramework(int $id, FrameworkRepository $frameworkRepository, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $framework = $frameworkRepository->find($id);
+
+        if (!$framework){
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Framework with id $id does not exist"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+        
+        $data = json_decode($request->getContent(), true);
+        $framework->setName($data['name']);
+        $em->flush();
+
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $framework,
+                "message" => "Edited with success"
+            ], 
+            Response::HTTP_OK
+        );
+    }
     
 }

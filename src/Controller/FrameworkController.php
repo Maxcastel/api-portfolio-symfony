@@ -73,4 +73,34 @@ class FrameworkController extends AbstractController
             );
         }
     }
+
+    #[Route('/api/frameworks/{id}', methods: ['DELETE'], name: 'framework_delete')]
+    public function deleteFramework(int $id, FrameworkRepository $frameworkRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $framework = $frameworkRepository->find($id);
+
+        if (!$framework){
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Framework with id $id does not exist"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $em->remove($framework);
+        $em->flush();
+
+        return $this->json(
+            [
+                "status" => 204,
+                "success" => true,
+                "message" => "Deleted with success"
+            ], 
+            Response::HTTP_NO_CONTENT
+        );
+    }
+    
 }

@@ -14,11 +14,11 @@ class Classe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['getFrameworks', 'getLanguages', 'getTypes'])]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Project::class)]

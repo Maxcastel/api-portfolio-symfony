@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ClasseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClasseRepository::class)]
@@ -13,9 +14,11 @@ class Classe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getFrameworks'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['getFrameworks'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'classe', targetEntity: Project::class)]

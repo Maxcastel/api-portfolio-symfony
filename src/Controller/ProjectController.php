@@ -7,12 +7,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\ProjectRepository;
+use App\Repository\TypeRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Project;
 use App\Entity\Framework;
 use App\Entity\Language;
-use App\Entity\Type;
 use Doctrine\Persistence\ManagerRegistry as PersistenceManagerRegistry;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProjectController extends AbstractController
 {
@@ -130,5 +133,40 @@ class ProjectController extends AbstractController
             ], 
             Response::HTTP_OK
         );
+    }
+
+    #[Route('/api/projects', methods: ['POST'], name: 'project_create')]
+    public function createProject(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, TypeRepository $typeRepository, CategoryRepository $categoryRepository): JsonResponse
+    {
+        try{
+            $data = json_decode($request->getContent(), true);
+            $project = $serializer->deserialize($request->getContent(), Project::class, 'json');
+            
+            $project->setType($typeRepository->find($data["type_id"]));
+            $project->setCategory($categoryRepository->find($data["category_id"]));
+
+            $em->persist($project);
+            $em->flush();
+            
+            return $this->json(
+                [
+                    "status" => 201,
+                    "success" => true,
+                    "data" => $project,
+                    "message" => "Created with success"
+                ], 
+                Response::HTTP_CREATED, [], ['groups' => 'getProjects']
+            );
+        }
+        catch(\Exception $e){
+            return $this->json(
+                [
+                    "status" => 400,
+                    "success" => false,
+                    "message" => $e->getMessage()
+                ], 
+                Response::HTTP_BAD_REQUEST
+            );
+        }
     }
 }

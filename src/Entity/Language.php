@@ -21,6 +21,9 @@ class Language
     #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
     private ?string $name = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $shortName = null;
+    
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'languages')]
     #[Groups(['getLanguages'])]
     private Collection $projects;
@@ -70,6 +73,18 @@ class Language
         if ($this->projects->removeElement($project)) {
             $project->removeLanguage($this);
         }
+
+        return $this;
+    }
+
+    public function getShortName(): ?string
+    {
+        return $this->shortName;
+    }
+
+    public function setShortName(string $shortName): static
+    {
+        $this->shortName = $shortName;
 
         return $this;
     }

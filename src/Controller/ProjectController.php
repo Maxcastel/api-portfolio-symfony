@@ -44,6 +44,7 @@ class ProjectController extends AbstractController
                     fn (Language $language) => [
                         'id' => $language->getId(),
                         'name' => $language->getName(),
+                        'shortName' => $language->getShortName(),
                     ]
                 )->toArray(),
                 'type' => [
@@ -108,6 +109,7 @@ class ProjectController extends AbstractController
                 fn (Language $language) => [
                     'id' => $language->getId(),
                     'name' => $language->getName(),
+                    'shortName' => $language->getShortName(),
                 ]
             )->toArray(),
             'type' => [

@@ -182,4 +182,33 @@ class ProjectController extends AbstractController
             );
         }
     }
+
+    #[Route('/api/projects/{id}', methods: ['DELETE'], name: 'project_delete')]
+    public function deleteProject(int $id, ProjectRepository $projectRepository, EntityManagerInterface $em): JsonResponse
+    {
+        $project = $projectRepository->find($id);
+
+        if (!$project) {
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Project with id $id does not exit"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $em->remove($project);
+        $em->flush();
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "message" => "Deleted with success"
+            ], 
+            Response::HTTP_OK
+        );
+    }
 }

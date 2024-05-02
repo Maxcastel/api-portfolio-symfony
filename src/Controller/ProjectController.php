@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Repository\ProjectRepository;
 use App\Repository\TypeRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\ClasseRepository;
+use App\Repository\FrameworkRepository;
+use App\Repository\LanguageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Project;
 use App\Entity\Framework;
@@ -138,18 +141,26 @@ class ProjectController extends AbstractController
     }
 
     #[Route('/api/projects', methods: ['POST'], name: 'project_create')]
-    public function createProject(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, TypeRepository $typeRepository, CategoryRepository $categoryRepository): JsonResponse
+    public function createProject(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, TypeRepository $typeRepository, CategoryRepository $categoryRepository, ClasseRepository $classeRepository, FrameworkRepository $frameworkRepository, LanguageRepository $languageRepository): JsonResponse
     {
         try{
             $data = json_decode($request->getContent(), true);
             $project = $serializer->deserialize($request->getContent(), Project::class, 'json');
             
-            $project->setType($typeRepository->find($data["type_id"]));
-            $project->setCategory($categoryRepository->find($data["category_id"]));
+            $project->setType($typeRepository->findOneBy(["name" => $data["type_name"]]));
+            $project->setCategory($categoryRepository->findOneBy(["name" => $data["category_name"]]));
+
+            foreach ($data["frameworks_name"] as $framework) {
+                $project->addFramework($frameworkRepository->findOneBy(["name" => $framework]));
+            }
+            foreach ($data["languages_name"] as $language) {
+                $project->addLanguage($languageRepository->findOneBy(["name" => $language]));
+            }
+            $project->setClasse($classeRepository->findOneBy(["name" => $data["classe_name"]]));
 
             $em->persist($project);
             $em->flush();
-            
+
             return $this->json(
                 [
                     "status" => 201,

@@ -24,6 +24,10 @@ class Project
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
+    private ?string $url = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -32,7 +36,7 @@ class Project
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
-    private ?string $url = null;
+    private ?string $link = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['getFrameworks', 'getLanguages', 'getTypes', 'getCategory', 'getClasses', 'getProjects'])]
@@ -243,6 +247,18 @@ class Project
     public function setClasse(?Classe $classe): static
     {
         $this->classe = $classe;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
 
         return $this;
     }

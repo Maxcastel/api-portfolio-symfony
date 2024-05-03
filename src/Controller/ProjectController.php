@@ -31,9 +31,10 @@ class ProjectController extends AbstractController
             fn (Project $project) => [
                 'id' => $project->getId(),
                 'title' => $project->getTitle(),
+                'url' => $project->getUrl(),
                 'description' => $project->getDescription(),
                 'content' => $project->getContent(),
-                'url' => $project->getUrl(),
+                'link' => $project->getLink(),
                 'github' => $project->getGithub(),
                 'date' => $project->getDate(),
                 'thumbnail' => $project->getThumbnail(),
@@ -96,9 +97,10 @@ class ProjectController extends AbstractController
         $response = [
             'id' => $project->getId(),
             'title' => $project->getTitle(),
+            'url' => $project->getUrl(),
             'description' => $project->getDescription(),
             'content' => $project->getContent(),
-            'url' => $project->getUrl(),
+            'link' => $project->getLink(),
             'github' => $project->getGithub(),
             'date' => $project->getDate(),
             'thumbnail' => $project->getThumbnail(),

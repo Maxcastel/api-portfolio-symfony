@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Contact;
+use App\Repository\ContactRepository;
 
 class ContactController extends AbstractController
 {
@@ -43,6 +44,22 @@ class ContactController extends AbstractController
                 "status" => 200,
                 "success" => true,
                 "message" => "Email send with success"
+            ], 
+            Response::HTTP_OK
+        );
+    }
+
+    #[Route('/api/emails', methods: ['GET'], name: 'emails_get')]
+    public function getEmails(ContactRepository $contactRepository): JsonResponse
+    {
+        $emails = $contactRepository->findAll();
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $emails,
+                "message" => "Operation completed with success"
             ], 
             Response::HTTP_OK
         );

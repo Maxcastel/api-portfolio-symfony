@@ -64,4 +64,31 @@ class ContactController extends AbstractController
             Response::HTTP_OK
         );
     }
+
+    #[Route('/api/emails/{id}', methods: ['GET'], name: 'emails_get_one')]
+    public function getEmail(int $id, ContactRepository $contactRepository): JsonResponse
+    {
+        $email = $contactRepository->find($id);
+
+        if (!$email) {
+            return $this->json(
+                [
+                    "status" => 404,
+                    "success" => false,
+                    "message" => "Email with id $id does not exist"
+                ], 
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return $this->json(
+            [
+                "status" => 200,
+                "success" => true,
+                "data" => $email,
+                "message" => "Operation completed with success"
+            ], 
+            Response::HTTP_OK
+        );
+    }
 }

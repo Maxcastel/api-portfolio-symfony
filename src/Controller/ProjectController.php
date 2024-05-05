@@ -249,6 +249,82 @@ class ProjectController extends AbstractController
         }
     }
 
+    #[Route('/api/projects/{id}', methods: ['PUT'], name: 'project_edit')]
+    public function editProject(int $id, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, ProjectRepository $projectRepository, TypeRepository $typeRepository, CategoryRepository $categoryRepository, ClasseRepository $classeRepository, FrameworkRepository $frameworkRepository, LanguageRepository $languageRepository): JsonResponse
+    {
+        try{
+            $project = $projectRepository->find($id);
+
+            if (!$project) {
+                return $this->json(
+                    [
+                        "status" => 404,
+                        "success" => false,
+                        "message" => "Project with id $id does not exit"
+                    ], 
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $data = json_decode($request->getContent(), true);
+
+            $project->setTitle($data['title']);
+            $project->setUrl($data['url']);
+            $project->setDescription($data['description']);
+            $project->setContent($data['content']);
+            if (isset($data['link'])) {
+                $project->setLink($data['link']);
+            }
+            if (isset($data['github'])) {
+                $project->setGithub($data['github']);
+            }
+            $project->setDate(new \DateTime($data['date']));
+            
+            $project->setThumbnail($data['thumbnail']);
+                        
+            $project->setType($typeRepository->findOneBy(["name" => $data["type_name"]]));
+            $project->setCategory($categoryRepository->findOneBy(["name" => $data["category_name"]]));
+            $project->setClasse($classeRepository->findOneBy(["name" => $data["classe_name"]]));
+
+            foreach ($project->getFrameworks() as $framework) {
+                $project->removeFramework($framework);
+            }
+            foreach ($project->getLanguages() as $language) {
+                $project->removeLanguage($language);
+            }
+
+            foreach ($data["frameworks_name"] as $framework) {
+                $project->addFramework($frameworkRepository->findOneBy(["name" => $framework]));
+            }
+            foreach ($data["languages_name"] as $language) {
+                $project->addLanguage($languageRepository->findOneBy(["name" => $language]));
+            }
+
+            $em->persist($project);
+            $em->flush();
+
+            return $this->json(
+                [
+                    "status" => 200,
+                    "success" => true,
+                    "data" => $project,
+                    "message" => "Edited with success"
+                ], 
+                Response::HTTP_OK, [], ['groups' => 'getProjects']
+            );
+        }
+        catch(\Exception $e){
+            return $this->json(
+                [
+                    "status" => 400,
+                    "success" => false,
+                    "message" => $e->getMessage()
+                ], 
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
     #[Route('/api/projects/{id}', methods: ['DELETE'], name: 'project_delete')]
     public function deleteProject(int $id, ProjectRepository $projectRepository, EntityManagerInterface $em): JsonResponse
     {

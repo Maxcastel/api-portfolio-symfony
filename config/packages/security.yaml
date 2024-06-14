@@ -38,8 +38,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/api, roles: PUBLIC_ACCESS }
-        - { path: ^/api/projects, methods: POST, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/frameworks, methods: GET, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/api/projects, methods: POST, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/isAuth, methods: GET, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/profile, roles: ROLE_USER }

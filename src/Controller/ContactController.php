@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Contact;
 use App\Repository\ContactRepository;
+use DateTime;
+use DateTimeZone;
 use Exception;
 
 class ContactController extends AbstractController
@@ -24,6 +26,11 @@ class ContactController extends AbstractController
             $data = json_decode($request->getContent(), true);
 
             $message = $serializer->deserialize($request->getContent(), Contact::class, 'json');
+
+            $sendDate = new DateTime($data['sendDate']);
+            $sendDate->setTimezone(new DateTimeZone('Europe/Paris'));
+
+            $message->setSendDate($sendDate);
 
             $email = (new Email())
                 ->from($data["email"])

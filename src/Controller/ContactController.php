@@ -45,6 +45,7 @@ class ContactController extends AbstractController
                 [
                     "status" => 200,
                     "success" => true,
+                    "data" => $message,
                     "message" => "Email send with success"
                 ], 
                 Response::HTTP_OK

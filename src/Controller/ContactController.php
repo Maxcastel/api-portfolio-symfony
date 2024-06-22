@@ -32,6 +32,9 @@ class ContactController extends AbstractController
 
             $message->setSendDate($sendDate);
 
+            $em->persist($message);
+            $em->flush();
+
             $email = (new Email())
                 ->from($data["email"])
                 ->to('maxence.castel59@gmail.com')
@@ -44,9 +47,6 @@ class ContactController extends AbstractController
                 ->html($data["message"]);
 
             $mailer->send($email);
-
-            $em->persist($message);
-            $em->flush();
 
             return $this->json(
                 [

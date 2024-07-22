@@ -41,6 +41,7 @@ security:
         - { path: ^/api/isAuth, methods: GET, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/projects/\d+$, methods: PUT, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/projects, methods: POST, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/emails, methods: GET, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         # - { path: ^/api/profile, roles: ROLE_USER }
